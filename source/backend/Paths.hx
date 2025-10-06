@@ -397,14 +397,8 @@ class Paths {
 	#end
 
 	inline static var ASSETS_DIRECTORY:String = "assets";
-	#if !DISABLE_SHARED_DIRECTORY
-	inline static var SHARED_DIRECTORY:String = "shared";
-	#end
 	#if MODS_ALLOWED
 	inline static var MODS_DIRECTORY:String = "mods";
-	#end
-	#if BASE_GAME_FILES
-	inline static var BASE_GAME_DIRECTORY:String = '$ASSETS_DIRECTORY/base_game';
 	#end
 
 	/**
@@ -418,7 +412,7 @@ class Paths {
 
 	public static function setCurrentLevel(lvl:String) {
 		currentLevel = null;
-		if (lvl != null && lvl.length > 0 #if !DISABLE_SHARED_DIRECTORY && lvl != SHARED_DIRECTORY #end) {
+		if (lvl != null && lvl.length > 0) {
 			currentLevel = lvl;
 			trace('Current asset folder:', currentLevel.toCMD(WHITE_BOLD));
 		}
@@ -546,19 +540,11 @@ class Paths {
 		directories.clearArray();
 
 		directories.unshift(preloadPath());
-		#if !DISABLE_SHARED_DIRECTORY
-		directories.unshift(preloadPath('$SHARED_DIRECTORY/'));
-		#end
 		#if MODS_ALLOWED
 		directories.unshift(modsPath());
 		#end
 
 		// adding specific directories
-		#if BASE_GAME_FILES
-		directories.unshift('$BASE_GAME_DIRECTORY/');
-		if (currentLevel != null)
-			directories.unshift('$BASE_GAME_DIRECTORY/$currentLevel/');
-		#end
 		if (currentLevel != null)
 			directories.unshift(preloadPath('$currentLevel/'));
 		#if MODS_ALLOWED

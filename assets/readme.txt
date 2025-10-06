@@ -1,20 +1,10 @@
 Here's a Q&A!
 
-Q: What is "assets/engine"?
-A: This folder will be "assets" after compiling
-
-Q: What is order of loading assets?
-A: "mods/<modFolder>/" => "mods/" => "assets/<currentLevel>/" => "assets/shared/" => "assets/"
-(for example: if "mods/<modFolder>/" not found, game will try load from "mods/" and etc)
-
 Q: Where should I put my charts?
 A: "assets/shared/data/"
 
 Q: Where should I put my songs?
 A: "assets/shared/songs/"
-
-Q: Where should images, characters, weeks, stages, sounds and other JSONs files go?
-A: You can put them in "assets/shared/" or "assets/shared/week_assets/your-week-folder/"! Really depends on your preference.
 
 Q: I don't want base game assets in my mod! What should I do??
 A: Go back to the main folder and open Project.xml, then delete the entire line with "BASE_GAME_FILES",

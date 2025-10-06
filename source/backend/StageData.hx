@@ -59,7 +59,7 @@ class StageData {
 	}
 
 	public static function loadStage(stage:String) {
-		stage = stage.strNotEmpty() ? stage : vanillaSongStage(PlayState.SONG.path);
+		stage = stage.strNotEmpty() ? stage : "stage";
 		PlayState.curStage = stage;
 
 		PlayState.initStage();
@@ -70,33 +70,6 @@ class StageData {
 	public static function getStageFile(stage:String):StageFile {
 		if (stage == null) return dummy();
 		return cast Json.parse(Paths.getTextFromFile('stages/$stage.json')) ?? dummy();
-	}
-
-	public static function vanillaSongStage(?songName:String):String {
-		#if BASE_GAME_FILES
-		switch (songName)
-		{
-			case 'spookeez' | 'south' | 'monster':
-				return 'spooky';
-			case 'pico' | 'blammed' | 'philly' | 'philly-nice':
-				return 'philly';
-			case 'milf' | 'satin-panties' | 'high':
-				return 'limo';
-			case 'cocoa' | 'eggnog':
-				return 'mall';
-			case 'winter-horrorland':
-				return 'mallEvil';
-			case 'senpai' | 'roses':
-				return 'school';
-			case 'thorns':
-				return 'schoolEvil';
-			case 'ugh' | 'guns' | 'stress':
-				return 'tank';
-			default:
-				return 'stage';
-		}
-		#end
-		return null;
 	}
 
 	public static var reservedNames:Array<String> = ['gf', 'gfGroup', 'dad', 'dadGroup', 'boyfriend', 'boyfriendGroup']; //blocks these names from being used on stage editor's name input text

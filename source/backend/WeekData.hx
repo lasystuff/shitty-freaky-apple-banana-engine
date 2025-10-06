@@ -39,17 +39,10 @@ class WeekData {
 
 	public static function createWeekFile():WeekFile {
 		var weekFile:WeekFile = {
-			#if BASE_GAME_FILES
-			songs: [["Bopeebo", "face", [146, 113, 253]], ["Fresh", "face", [146, 113, 253]], ["Dad Battle", "face", [146, 113, 253]]],
-			weekCharacters: ['dad', 'bf', 'gf'],
-			weekBackground: 'stage',
-			weekBefore: 'tutorial',
-			#else
 			songs: [["Song", "face", [146, 113, 253]]],
 			weekCharacters: ['bf', 'bf', 'gf'],
 			weekBackground: '',
 			weekBefore: '',
-			#end
 			storyName: 'Your New Week',
 			weekName: 'Custom Week',
 			startUnlocked: true,

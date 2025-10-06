@@ -75,35 +75,27 @@
 	<!-- thx to https://github.com/HaxeFoundation/haxelib/issues/618#issuecomment-1973587186 -->
 	<setenv name="HAXEPATH" value="./"/>
 
-	<haxelib name="hxcpp-debug-server" version="1.2.4" if="debug" />
-	<haxelib name="hxcpp"              version="4.3.2" />
-	<haxelib name="lime"               version="8.1.2" />
-	<haxelib name="openfl"             version="9.3.3" />
+	<haxelib name="hxcpp-debug-server" if="debug"/>
+	<haxelib name="hxcpp"/>
+	<haxelib name="lime"/>
+	<haxelib name="openfl"/>
 
-	<haxelib name="hscript"            version="git" url="https://github.com/TheLeerName/hscript-iris-flixel-debugger" branch="45dffd7" if="HSCRIPT_ALLOWED" />
+	<haxelib name="hscript-iris" if="HSCRIPT_ALLOWED"/>
 
-	<haxelib name="flixel"             version="5.6.2" />
-	<haxelib name="flixel-addons"      version="3.2.3" />
-	<haxelib name="tjson"              version="1.4.0" />
+	<haxelib name="flixel"/>
+	<haxelib name="flixel-addons"/>
+	<haxelib name="tjson"/>
 
-	<haxelib name="hxvlc"              version="1.9.2" if="VIDEOS_ALLOWED" />
-	<haxelib name="hxdiscord_rpc"      version="1.2.4" if="DISCORD_ALLOWED" />
+	<haxelib name="hxvlc" if="VIDEOS_ALLOWED"/>
+	<haxelib name="hxdiscord_rpc"      version="1.2.4" if="DISCORD_ALLOWED"/>
 
-	<haxelib name="linc_luajit"        version="git" url="https://github.com/superpowers04/linc_luajit" branch="1906c4a" if="LUA_ALLOWED" />
-	<haxelib name="flxanimate"         version="git" url="https://github.com/Dot-Stuff/flxanimate"      branch="768740a" />
-	<haxelib name="grig.audio"         version="git" url="https://github.com/osakared/grig.audio"       branch="57f5d47" if="BASE_GAME_FILES" />
-	<haxelib name="tink_core"          version="1.26.0" />
-	<haxelib name="funkin.vis"         version="git" url="https://github.com/FunkinCrew/funkVis"        branch="22b1ce0" if="BASE_GAME_FILES" />
+	<haxelib name="linc_luajit" if="LUA_ALLOWED"/>
+	<haxelib name="flxanimate"/>
+	<haxelib name="grig.audio"/>
+	<haxelib name="tink_core" />
+	<haxelib name="funkin.vis"/>
 
 	<!-- __________________________ Game Assets & Etc. __________________________ -->
-
-	<assets path="assets/engine" rename="assets" exclude="*.ogg" if="web" />
-	<assets path="assets/engine" rename="assets" exclude="*.mp3" unless="web" />
-
-	<section if="BASE_GAME_FILES">
-		<assets path="assets/base_game" exclude="*.ogg" if="web"/>
-		<assets path="assets/base_game" exclude="*.mp3" unless="web"/>
-	</section>
 
 	<section unless="DISABLE_SHARED_DIRECTORY">
 		<assets path="assets/shared" rename="assets/shared" exclude="*.ogg" if="web"/>
