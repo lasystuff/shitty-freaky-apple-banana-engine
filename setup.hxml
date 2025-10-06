@@ -1,0 +1,4 @@
+-cp ./setup
+-D analyzer-optimize
+-m Main
+--interp

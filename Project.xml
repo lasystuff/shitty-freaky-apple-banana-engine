@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project>
+	<!-- _________________________ Application Settings _________________________ -->
+
+	<app title="Leer's Psych Mod Core" file="LeersPsychModCore" packageName="com.theleername.psychmodcore" package="com.theleername.psychmodcore" main="Main" version="0.2.8" company="TheLeerName" />
+
+	<!--Switch Export with Unique ApplicationID and Icon-->
+	<set name="APP_ID" value="0x0100f6c013bbc000" />
+
+	<!-- NOTE TO SELF: DISABLE THIS IF ISSUES ARE FOUND -->
+	<haxedef name="LINC_LUA_RELATIVE_DYNAMIC_LIB"/> <!-- stable luas PUT AFTER FIRST LINE WITH APP NAME AND ETC -->
+
+	<!--The flixel preloader is not accurate in Chrome. You can use it regularly if you embed the swf into a html file
+		or you can set the actual size of your file manually at "FlxPreloaderBase-onUpdate-bytesTotal"-->
+	<!-- <app preloader="Preloader" resizable="true" /> -->
+	<app preloader="flixel.system.FlxPreloader" />
+
+	<!--Minimum without FLX_NO_GAMEPAD: 11.8, without FLX_NO_NATIVE_CURSOR: 11.2-->
+	<set name="SWF_VERSION" value="11.8" />
+
+	<!-- ______________________ PSYCH ENGINE CUSTOMIZATION ______________________ -->
+
+	<define name="MODS_ALLOWED" if="desktop" />
+	<define name="HSCRIPT_ALLOWED" if="desktop" />
+	<define name="LUA_ALLOWED" if="desktop" />
+	<define name="ACHIEVEMENTS_ALLOWED" />
+	<define name="TRANSLATIONS_ALLOWED" />
+	<define name="DISCORD_ALLOWED" if="cpp"/>
+	<define name="VIDEOS_ALLOWED" if="desktop || android" unless="32bits"/>
+
+	<define name="IRIS_DEBUG"/>
+	<define name="CRASH_HANDLER" if="desktop release" />
+
+	<!-- DELETE THIS TO REMOVE WATERMARKS/DEV NAMES ON TITLE SCREEN -->
+	<define name="PSYCH_WATERMARKS"/>
+	<!-- DELETE THIS IF YOU WANT TO USE SHARED DIRECTORY IN YOUR MOD -->
+	<define name="DISABLE_SHARED_DIRECTORY" />
+	<!-- DELETE THIS IF YOU DONT WANT BASE GAME ASSETS IN YOUR MOD -->
+	<define name="BASE_GAME_FILES" />
+
+	<!-- ____________________________ Window Settings ___________________________ -->
+
+	<!--These window settings apply to all targets-->
+	<window width="1280" height="720" fps="60" background="#000000" hardware="true" vsync="false" />
+
+	<!--HTML5-specific-->
+	<window if="html5" resizable="true" />
+
+	<!--Desktop-specific-->
+	<window if="desktop" orientation="landscape" fullscreen="false" resizable="true" vsync="false"/>
+
+	<!--Mobile-specific-->
+	<window if="mobile" orientation="landscape" fullscreen="true" width="0" height="0" resizable="false"/>
+
+	<!--Switch-specific-->
+	<window if="switch" orientation="landscape" fullscreen="true" width="0" height="0" resizable="true" />
+
+	<!-- _____________________________ Path Settings ____________________________ -->
+
+	<set name="BUILD_DIR" value="export/debug" if="debug" />
+	<set name="BUILD_DIR" value="export/release" unless="debug" />
+	<set name="BUILD_DIR" value="export/32bit" if="32bits" />
+
+	<classpath name="source" />
+
+	<!-- _______________________________ Libraries ______________________________ -->
+
+	<log unless="${haxe >= 4.3.0}" error="Haxe ${haxe} is not compatible! Recommended to use Haxe 4.3.2 or higher" />
+	<log unless="${haxe >= 4.3.2}" warn="Haxe ${haxe} may not be compatible! Recommended to use Haxe 4.3.2 or higher" />
+
+	<!-- btw i improved haxelib node so we can use it as setup dependencies list -->
+	<!-- also btw branch and commit its the same -->
+
+	<!-- fixes buildXml macro which doesnt check local packages, but with this line haxe can use ONLY local libs -->
+	<!-- thx to https://github.com/HaxeFoundation/haxelib/issues/618#issuecomment-1973587186 -->
+	<setenv name="HAXEPATH" value="./"/>
+
+	<haxelib name="hxcpp-debug-server" version="1.2.4" if="debug" />
+	<haxelib name="hxcpp"              version="4.3.2" />
+	<haxelib name="lime"               version="8.1.2" />
+	<haxelib name="openfl"             version="9.3.3" />
+
+	<haxelib name="hscript"            version="git" url="https://github.com/TheLeerName/hscript-iris-flixel-debugger" branch="45dffd7" if="HSCRIPT_ALLOWED" />
+
+	<haxelib name="flixel"             version="5.6.2" />
+	<haxelib name="flixel-addons"      version="3.2.3" />
+	<haxelib name="tjson"              version="1.4.0" />
+
+	<haxelib name="hxvlc"              version="1.9.2" if="VIDEOS_ALLOWED" />
+	<haxelib name="hxdiscord_rpc"      version="1.2.4" if="DISCORD_ALLOWED" />
+
+	<haxelib name="linc_luajit"        version="git" url="https://github.com/superpowers04/linc_luajit" branch="1906c4a" if="LUA_ALLOWED" />
+	<haxelib name="flxanimate"         version="git" url="https://github.com/Dot-Stuff/flxanimate"      branch="768740a" />
+	<haxelib name="grig.audio"         version="git" url="https://github.com/osakared/grig.audio"       branch="57f5d47" if="BASE_GAME_FILES" />
+	<haxelib name="tink_core"          version="1.26.0" />
+	<haxelib name="funkin.vis"         version="git" url="https://github.com/FunkinCrew/funkVis"        branch="22b1ce0" if="BASE_GAME_FILES" />
+
+	<!-- __________________________ Game Assets & Etc. __________________________ -->
+
+	<assets path="assets/engine" rename="assets" exclude="*.ogg" if="web" />
+	<assets path="assets/engine" rename="assets" exclude="*.mp3" unless="web" />
+
+	<section if="BASE_GAME_FILES">
+		<assets path="assets/base_game" exclude="*.ogg" if="web"/>
+		<assets path="assets/base_game" exclude="*.mp3" unless="web"/>
+	</section>
+
+	<section unless="DISABLE_SHARED_DIRECTORY">
+		<assets path="assets/shared" rename="assets/shared" exclude="*.ogg" if="web"/>
+		<assets path="assets/shared" rename="assets/shared" exclude="*.mp3" unless="web"/>
+	</section>
+
+	<assets path='example_mods' rename='mods' if="MODS_ALLOWED"/>
+	<haxeflag name="--macro" value="macros.CustomManifestFolder.init()" />
+
+	<!-- ______________________________ Haxedefines _____________________________ -->
+
+	<!-- <haxedef name="HXVLC_LOGGING" if="VIDEOS_ALLOWED debug" /> -->
+	<!-- <haxedef name="HXVLC_NO_SHARE_DIRECTORY" if="VIDEOS_ALLOWED" /> -->
+	<define name="x86_BUILD" if="32bits" />
+
+	<!-- i guess thats need for hscript iris ??? -->
+	<haxedef name="hscriptPos" />
+
+	<!-- Disable Discord IO Thread -->
+	<haxedef name="DISCORD_DISABLE_IO_THREAD" if="hxdiscord_rpc" />
+	<haxedef name="NO_PRECOMPILED_HEADERS" if="linux" />
+
+	<!--Disable the Flixel core focus lost screen-->
+	<haxedef name="FLX_NO_FOCUS_LOST_SCREEN" />
+
+	<!--Disable the Flixel core debugger. Automatically gets set whenever you compile in release mode!-->
+	<haxedef name="FLX_NO_DEBUG" unless="debug" />
+
+	<!--Enable this for Nape release builds for a serious peformance improvement-->
+	<haxedef name="NAPE_RELEASE_BUILD" unless="debug" />
+
+	<!--Used for Izzy Engine's crash handler-->
+	<haxedef name="HXCPP_CHECK_POINTER" if="CRASH_HANDLER" />
+	<haxedef name="HXCPP_STACK_LINE" if="CRASH_HANDLER" />
+	<haxedef name="HXCPP_STACK_TRACE" if="CRASH_HANDLER" />
+
+	<!--Disable deprecated warnings-->
+	<haxedef name='no-deprecation-warnings' />
+
+	<!-- Haxe 4.3.0+: Enable pretty syntax errors and stuff. -->
+	<!-- pretty (haxeflixel default), indent, classic (haxe compiler default) -->
+	<haxedef name="message.reporting" value="pretty" />
+
+	<!-- _________________________________ Macros _______________________________ -->
+
+	<haxeflag name="--macro" value="allowPackage('flash')" />
+	<haxeflag name="--macro" value="include('stages')" />
+	<haxeflag name="--macro" value="include('backend.transition')" />
+
+	<!-- _________________________________ Custom _______________________________ -->
+
+	<assets path='art/iconOG.png' rename='icon.png' if="linux" />
+
+	<icon path="art/icon16.png" size='16'/>
+	<icon path="art/icon32.png" size='32'/>
+	<icon path="art/icon64.png" size='64'/>
+	<icon path="art/iconOG.png" />
+</project>

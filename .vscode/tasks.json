@@ -1,0 +1,23 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Setup Libraries",
+			"command": "haxe",
+			"args": ["setup.hxml"],
+			"type": "shell"
+		},
+		{
+			"label": "WinDebug Test / TRACE_CACHED_ASSETS",
+			"command": "lime",
+			"args": ["test", "windows", "-debug", "-D", "TRACE_CACHED_ASSETS"],
+			"type": "shell"
+		},
+		{
+			"label": "WinRelease Test",
+			"command": "lime",
+			"args": ["test", "windows"],
+			"type": "shell"
+		}
+	]
+}
