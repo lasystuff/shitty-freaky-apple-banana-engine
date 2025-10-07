@@ -234,19 +234,7 @@ class PlayState extends MusicBeatState
 		if (curStage == null || (stage != null && stage.name == curStage)) return;
 		// que pro tip: you can use name of class (not package) as stage in json without adding it here!
 		var stages:Map<String, Class<BaseStage>> = [
-			#if BASE_GAME_FILES
 			'stage' => stages.StageWeek1, //Week 1
-			'spooky' => stages.Spooky,
-			'philly' => stages.Philly,
-			'limo' => stages.Limo,
-			'mall' => stages.Mall,
-			'mallEvil' => stages.MallEvil,
-			'school' => stages.School,
-			'schoolEvil' => stages.SchoolEvil,
-			'tank' => stages.Tank,
-			'phillyStreets' => stages.PhillyStreets,
-			'phillyBlazin' => stages.PhillyBlazin,
-			#end
 		];
 
 		stageObjects.clear();

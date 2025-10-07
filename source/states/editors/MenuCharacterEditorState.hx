@@ -15,7 +15,7 @@ class MenuCharacterEditorState extends MusicBeatState implements PsychUIEventHan
 	var grpWeekCharacters:FlxTypedGroup<MenuCharacter>;
 	var characterFile:MenuCharacterFile = null;
 	var txtOffsets:FlxText;
-	var defaultCharacters:Array<String> = [#if BASE_GAME_FILES 'dad' #else 'bf' #end, 'bf', 'gf'];
+	var defaultCharacters:Array<String> = ['bf', 'bf', 'gf'];
 	var unsavedProgress:Bool = false;
 
 	override function create() {

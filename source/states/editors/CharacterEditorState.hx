@@ -1066,14 +1066,8 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 		}
 	}
 
-	final assetFolder = 'week_assets/week1';  //load from assets/base_game/week_assets/week1/
 	function loadBG()
 	{
-		var thePath:String = Paths.path(assetFolder);
-		if (thePath == null) return;
-
-		Paths.directories.unshift('$thePath/');
-
 		var bg:BGSprite = new BGSprite('stageback', -600, -200, 0.9, 0.9);
 		add(bg);
 
@@ -1081,8 +1075,6 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 		stageFront.setGraphicSize(Std.int(stageFront.width * 1.1));
 		stageFront.updateHitbox();
 		add(stageFront);
-
-		Paths.resetDirectories();
 	}
 
 

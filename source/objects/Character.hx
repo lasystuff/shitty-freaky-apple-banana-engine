@@ -83,14 +83,6 @@ class Character extends FlxSprite
 		animOffsets = new Map<String, Array<Dynamic>>();
 		this.isPlayer = isPlayer;
 		changeCharacter(character);
-
-		#if BASE_GAME_FILES
-		switch(curCharacter)
-		{
-			case 'pico-blazin', 'darnell-blazin':
-				skipDance = true;
-		}
-		#end
 	}
 
 	public function changeCharacter(character:String)
