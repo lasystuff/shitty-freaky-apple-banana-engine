@@ -193,13 +193,14 @@ class FileReferenceCustom extends FileReference
 		if (typeFilter != null)
 		{
 			var filters = [];
-
+			#if !mac
 			for (type in typeFilter)
 			{
 				filters.push(StringTools.replace(StringTools.replace(type.extension, "*.", ""), ";", ","));
 			}
 
 			filter = filters.join(";");
+			#end
 		}
 
 		var openFileDialog = new FileDialog();

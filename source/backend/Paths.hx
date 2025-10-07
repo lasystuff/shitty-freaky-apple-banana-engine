@@ -396,9 +396,24 @@ class Paths {
 	inline static var VIDEO_EXT = "mp4";
 	#end
 
-	inline static var ASSETS_DIRECTORY:String = "assets";
+	inline static var ASSETS_DIRECTORY:String =
+	#if (REDIRECT_ASSETS_FOLDER && macos)
+    "../../../../../../../assets"
+    #elseif REDIRECT_ASSETS_FOLDER
+    "../../../../assets"
+    #else
+    "assets"
+    #end;
+
 	#if MODS_ALLOWED
-	inline static var MODS_DIRECTORY:String = "mods";
+	inline static var MODS_DIRECTORY:String =
+	#if (REDIRECT_ASSETS_FOLDER && macos)
+    "../../../../../../../mods"
+    #elseif REDIRECT_ASSETS_FOLDER
+    "../../../../mods"
+    #else
+    "mods"
+    #end;
 	#end
 
 	/**

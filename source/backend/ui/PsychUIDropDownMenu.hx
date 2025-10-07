@@ -38,7 +38,7 @@ class PsychUIDropDownMenu extends PsychUIInputText
 		{
 			if(old != cur)
 			{
-				_curFilter = this.list.filter(function(str:String) return str.startsWith(cur));
+				_curFilter = this.list.filter(function(str:String) return str.toLowerCase().contains(cur.toLowerCase()));
 				showDropDown(true, 0, _curFilter);
 			}
 		}

@@ -92,9 +92,9 @@
 
 	<!-- __________________________ Game Assets & Etc. __________________________ -->
 
-	<assets path="assets"/>
+	<assets path="assets" unless="REDIRECT_ASSETS_FOLDER"/>
 
-	<assets path='example_mods' rename='mods' if="MODS_ALLOWED"/>
+	<assets path='example_mods' rename='mods' if="MODS_ALLOWED" unless="REDIRECT_ASSETS_FOLDER"/>
 	<haxeflag name="--macro" value="macros.CustomManifestFolder.init()" />
 
 	<!-- ______________________________ Haxedefines _____________________________ -->
