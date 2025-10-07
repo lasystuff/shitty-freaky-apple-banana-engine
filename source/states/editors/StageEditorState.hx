@@ -986,13 +986,21 @@ class StageEditorState extends MusicBeatState implements PsychUIEventHandler.Psy
 	{
 		var tab_group = UI_box.getTab('Meta').menu;
 
-		var characterList = Paths.mergeAllTextsNamed('data/characterList.txt');
+		var characterList = [];
 		for (directory in Paths.directoriesWithFile('characters'))
 			for (file in Paths.readDirectory(directory)) if(file.hasExtension('json')) {
 				var charToCheck:String = file.removeExtension();
 				if(!characterList.contains(charToCheck))
 					characterList.push(charToCheck);
 			}
+
+		characterList.sort(function(a:String, b:String):Int{
+			a = a.toUpperCase();
+			b = b.toUpperCase();
+			if(a < b){ return -1; }
+			else if(a > b){ return 1; }
+			else{ return 0; }
+		});
 
 		if(characterList.length < 1) characterList.push(''); //Prevents crash
 		
@@ -1278,6 +1286,14 @@ class StageEditorState extends MusicBeatState implements PsychUIEventHandler.Psy
 			}
 
 		if(stageList.length < 1) stageList.push('');
+		stageList.sort(function(a:String, b:String):Int{
+			a = a.toUpperCase();
+			b = b.toUpperCase();
+			if(a < b){ return -1; }
+			else if(a > b){ return 1; }
+			else{ return 0; }
+		});
+
 		stageDropDown.list = stageList;
 		stageDropDown.selectedLabel = lastLoadedStage;
 		directoryDropDown.selectedLabel = stageJson.directory;

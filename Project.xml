@@ -2,7 +2,7 @@
 <project>
 	<!-- _________________________ Application Settings _________________________ -->
 
-	<app title="Leer's Psych Mod Core" file="LeersPsychModCore" packageName="com.theleername.psychmodcore" package="com.theleername.psychmodcore" main="Main" version="0.2.8" company="TheLeerName" />
+	<app title="Shitty Freaky Banana Engine" file="shitty freaky banana engine" packageName="com.lasystuff.whatthefuckevenitis" package="com.lasystuff.whatthefuckevenitis" main="Main" version="0.2.8" company="Lasystuff" />
 
 	<!--Switch Export with Unique ApplicationID and Icon-->
 	<set name="APP_ID" value="0x0100f6c013bbc000" />
@@ -68,8 +68,6 @@
 	<log unless="${haxe >= 4.3.0}" error="Haxe ${haxe} is not compatible! Recommended to use Haxe 4.3.2 or higher" />
 	<log unless="${haxe >= 4.3.2}" warn="Haxe ${haxe} may not be compatible! Recommended to use Haxe 4.3.2 or higher" />
 
-	<!-- btw i improved haxelib node so we can use it as setup dependencies list -->
-	<!-- also btw branch and commit its the same -->
 
 	<!-- fixes buildXml macro which doesnt check local packages, but with this line haxe can use ONLY local libs -->
 	<!-- thx to https://github.com/HaxeFoundation/haxelib/issues/618#issuecomment-1973587186 -->
@@ -91,16 +89,10 @@
 
 	<haxelib name="linc_luajit" if="LUA_ALLOWED"/>
 	<haxelib name="flxanimate"/>
-	<haxelib name="grig.audio"/>
-	<haxelib name="tink_core" />
-	<haxelib name="funkin.vis"/>
 
 	<!-- __________________________ Game Assets & Etc. __________________________ -->
 
-	<section unless="DISABLE_SHARED_DIRECTORY">
-		<assets path="assets/shared" rename="assets/shared" exclude="*.ogg" if="web"/>
-		<assets path="assets/shared" rename="assets/shared" exclude="*.mp3" unless="web"/>
-	</section>
+	<assets path="assets"/>
 
 	<assets path='example_mods' rename='mods' if="MODS_ALLOWED"/>
 	<haxeflag name="--macro" value="macros.CustomManifestFolder.init()" />

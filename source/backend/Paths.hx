@@ -391,7 +391,7 @@ class Paths {
 	public static var imageReplacer:BitmapData;
 
 	//inline static var IMAGE_EXT = "png"; // not used cuz it can load jpg lol
-	inline static var SOUND_EXT = #if web "mp3" #else "ogg" #end;
+	inline static var SOUND_EXT =  "ogg";
 	#if VIDEOS_ALLOWED
 	inline static var VIDEO_EXT = "mp4";
 	#end
@@ -444,7 +444,7 @@ class Paths {
 	public static function callStackTrace(stackItem:StackItem, str:String):Null<Any> {
 		stackItem = getStackItem(stackItem);
 		switch (stackItem) {
-			case FilePos(s, file, line, column): Main.println(Main.startOfTrace(file, line) + str);
+			#if windows case FilePos(s, file, line, column): Main.println(Main.startOfTrace(file, line) + str); #end
 			default: trace(str);
 		}
 		return null;

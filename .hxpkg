@@ -1,0 +1,31 @@
+[
+	{
+		"profile": "default",
+		"pkgs": [
+            {"name": "lime"},
+            {"name": "openfl"},
+			{"name": "flixel"},
+			{"name": "flixel-addons"},
+            {"name": "tjson"},
+			{"name": "flixel-ui"},
+			{"name": "hscript-iris"},
+			{"name": "hxcpp-debug-server"},
+			{"name": "hxcpp"},
+			{"name": "hxvlc"},
+			{
+				"name": "linc_luajit",
+				"link": "https://github.com/superpowers04/linc_luajit",
+				"branch": "1906c4a"
+			},
+            {
+				"name": "flxanimate",
+				"link": "https://github.com/FixedData/flxanimate",
+				"branch": "768740a"
+			},
+			{
+				"name": "hxdiscord_rpc",
+				"version": "1.2.4"
+			}
+		]
+	}
+]

@@ -4,6 +4,7 @@ import flixel.FlxState;
 import flixel.addons.transition.FlxTransitionableState;
 
 import backend.PsychCamera;
+import psychlua.CustomState;
 
 class MusicBeatState extends FlxState
 {
@@ -150,7 +151,9 @@ class MusicBeatState extends FlxState
 	public static function switchState(nextState:FlxState, ?dumpCache:Bool = false) {
 		if (dumpCache) FlxG.signals.preStateCreate.addOnce(_ -> Paths.clearStoredMemory());
 
-		trace('Switching to ' + Type.getClassName(Type.getClass(nextState)).toCMD(WHITE_BOLD));
+		var clsName = Type.getClassName(Type.getClass(nextState)).split(".")[Type.getClassName(Type.getClass(nextState)).split(".").length - 1];
+		if (Paths.path("states/" + clsName + ".hx") != null)
+			nextState = new CustomState(clsName);
 
 		FlxG.switchState(nextState);
 	}

@@ -54,7 +54,7 @@ class HScript extends Iris
 	{
 		file ??= '';
 	
-		super(null, {name: "hscript-iris", autoRun: false, autoPreset: false});
+		super(null, {name: parent != null ? parent.scriptName : file, autoRun: false, autoPreset: false});
 
 		#if LUA_ALLOWED
 		parentLua = parent;
@@ -105,6 +105,7 @@ class HScript extends Iris
 		set('FlxText', flixel.text.FlxText);
 		set('FlxCamera', flixel.FlxCamera);
 		set('PsychCamera', backend.PsychCamera);
+		set('MusicBeatState', MusicBeatState);
 		set('FlxTimer', flixel.util.FlxTimer);
 		set('FlxTween', flixel.tweens.FlxTween);
 		set('FlxEase', flixel.tweens.FlxEase);
@@ -126,6 +127,7 @@ class HScript extends Iris
 		#if flxanimate
 		set('FlxAnimate', FlxAnimate);
 		#end
+		set('CustomState', CustomState);
 
 		var variables = MusicBeatState.getVariables();
 		// Functions & Variables
@@ -145,7 +147,10 @@ class HScript extends Iris
 			{
 				if(this.modFolder == null)
 				{
-					game.addTextToDebug('getModSetting: Argument #2 is null and script is not inside a packed Mod folder!', FlxColor.RED);
+					if (game != null)
+						game.addTextToDebug('getModSetting: Argument #2 is null and script is not inside a packed Mod folder!', FlxColor.RED);
+					else
+						trace('getModSetting: Argument #2 is null and script is not inside a packed Mod folder!');
 					return null;
 				}
 				modName = this.modFolder;
@@ -198,7 +203,7 @@ class HScript extends Iris
 			return Reflect.getProperty(controller.justReleased, name) == true;
 		});
 
-		var controls = game.controls;
+		var controls = cast(FlxG.state, MusicBeatState).controls;
 		set('keyJustPressed', function(name:String = '') {
 			name = name.toLowerCase();
 			switch(name) {
@@ -238,9 +243,10 @@ class HScript extends Iris
 		// not very tested but should work
 		set('createGlobalCallback', function(name:String, func:Dynamic)
 		{
-			for (script in game.luaArray)
-				if(script?.lua != null && !script.closed)
-					script.set(name, func);
+			if (game != null)
+				for (script in game.luaArray)
+					if(script?.lua != null && !script.closed)
+						script.set(name, func);
 			FunkinLua.customFunctions.set(name, func);
 		});
 
@@ -302,12 +308,17 @@ class HScript extends Iris
 	}
 
 	public function debugPrint(text:String, color:FlxColor = FlxColor.WHITE):Void {
-		#if LUA_ALLOWED
-		if (parentLua != null)
-			return parentLua.debugPrint(text, color);
-		#end
+		if (game != null)
+		{
+			#if LUA_ALLOWED
+			if (parentLua != null)
+				return parentLua.debugPrint(text, color);
+			#end
 
-		return game.addTextToDebug(text, color);
+			return game.addTextToDebug(text, color);
+		}
+		
+		trace(text);
 	}
 
 	#if LUA_ALLOWED

@@ -35,6 +35,10 @@ typedef TitleData =
 
 class TitleState extends MusicBeatState
 {
+	// others later
+	public static final INTRO_TEXTS:Array<Array<String>> = [
+		["dope ass game", "playstation magazine"]
+	];
 	public static var muteKeys:Array<FlxKey> = [FlxKey.ZERO];
 	public static var volumeDownKeys:Array<FlxKey> = [FlxKey.NUMPADMINUS, FlxKey.MINUS];
 	public static var volumeUpKeys:Array<FlxKey> = [FlxKey.NUMPADPLUS, FlxKey.PLUS];
@@ -146,25 +150,10 @@ class TitleState extends MusicBeatState
 		}
 
 
-		var animFrames:Array<FlxFrame> = [];
 		titleText = new FlxSprite(enterPosition.x, enterPosition.y);
 		titleText.frames = Paths.getSparrowAtlas('titleEnter');
-		@:privateAccess
-		{
-			titleText.animation.findByPrefix(animFrames, "ENTER IDLE");
-			titleText.animation.findByPrefix(animFrames, "ENTER FREEZE");
-		}
-		
-		if (newTitle = animFrames.length > 0)
-		{
-			titleText.animation.addByPrefix('idle', "ENTER IDLE", 24);
-			titleText.animation.addByPrefix('press', ClientPrefs.data.flashing ? "ENTER PRESSED" : "ENTER FREEZE", 24);
-		}
-		else
-		{
-			titleText.animation.addByPrefix('idle', "Press Enter to Begin", 24);
-			titleText.animation.addByPrefix('press', "ENTER PRESSED", 24);
-		}
+		titleText.animation.addByPrefix('idle', "ENTER IDLE", 24);
+		titleText.animation.addByPrefix('press', ClientPrefs.data.flashing ? "ENTER PRESSED" : "ENTER FREEZE", 24);
 		titleText.animation.play('idle');
 		titleText.updateHitbox();
 
@@ -240,7 +229,7 @@ class TitleState extends MusicBeatState
 	function getIntroTextShit():Array<Array<String>>
 	{
 		var firstArray:Array<String> = Paths.mergeAllTextsNamed('data/introText.txt');
-		var swagGoodArray:Array<Array<String>> = [];
+		var swagGoodArray:Array<Array<String>> = INTRO_TEXTS.copy();
 
 		for (i in firstArray)
 			swagGoodArray.push(i.split('--'));

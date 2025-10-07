@@ -442,7 +442,7 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 		updateGridVisibility();
 
 		// CHARACTERS FOR THE DROP DOWNS
-		var gameOverCharacters:Array<String> = loadFileList('characters/', 'data/characterList.txt');
+		var gameOverCharacters:Array<String> = loadFileList('characters/');
 		var characterList:Array<String> = gameOverCharacters.filter((name:String) -> (!name.endsWith('-dead') && !name.endsWith('-death')));
 		playerDropDown.list = characterList;
 		opponentDropDown.list = characterList;
@@ -456,7 +456,7 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 		});
 		gameOverCharDropDown.list = gameOverCharacters;
 
-		stageDropDown.list = loadFileList('stages/', 'data/stageList.txt');
+		stageDropDown.list = loadFileList('stages/');
 		onChartLoaded();
 
 		var tipText:FlxText = new FlxText(FlxG.width - 210, FlxG.height - 30, 200, 'Press F1 for Help', 20);
@@ -4590,20 +4590,11 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 		super.destroy();
 	}
 
-	function loadFileList(mainFolder:String, ?optionalList:String = null, ?fileTypes:Array<String> = null)
+	function loadFileList(mainFolder:String, ?fileTypes:Array<String> = null)
 	{
 		fileTypes ??= ['.json'];
 
 		var fileList:Array<String> = [];
-		if(optionalList != null)
-		{
-			for (file in Paths.mergeAllTextsNamed(optionalList))
-			{
-				file = file.trim();
-				if(file.length > 0 && !fileList.contains(file))
-					fileList.push(file);
-			}
-		}
 
 		#if MODS_ALLOWED
 		for (directory in Paths.directoriesWithFile(mainFolder))
@@ -4620,6 +4611,15 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 				}
 			}
 		#end
+
+		fileList.sort(function(a:String, b:String):Int{
+			a = a.toUpperCase();
+			b = b.toUpperCase();
+			if(a < b){ return -1; }
+			else if(a > b){ return 1; }
+			else{ return 0; }
+		});
+
 		return fileList;
 	}
 

@@ -56,7 +56,7 @@ class FPSCounter extends TextField
 		currentFPS = 0;
 		selectable = false;
 		mouseEnabled = false;
-		defaultTextFormat = new TextFormat("_sans", 14, color);
+		defaultTextFormat = new TextFormat(Paths.font("vcr.ttf"), 14, color);
 		autoSize = LEFT;
 		multiline = true;
 		text = "";
@@ -67,18 +67,6 @@ class FPSCounter extends TextField
 		#end
 
 		resetTextFormat();
-	}
-
-	/** Usually used before `MusicBeatState.switchState` or in start of `create()` */
-	public function tweenToColor(color:FlxColor, ?withDelay:Bool) {
-		if (normalColor == color) return;
-		var dur:Float = BaseTransition.DURATION;
-
-		function lol(?idk)
-			CoolUtil.tweenColor(this, {normalColor: color}, dur);
-
-		if (withDelay) FlxG.signals.preStateCreate.addOnce(lol);
-		else lol();
 	}
 
 	@:noCompletion var pressedF3(default, set):Bool = false;

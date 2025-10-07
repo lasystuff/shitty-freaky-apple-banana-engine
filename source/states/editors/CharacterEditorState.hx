@@ -7,7 +7,6 @@ import openfl.events.IOErrorEvent;
 import flixel.util.FlxDestroyUtil;
 import flixel.graphics.FlxGraphic;
 import flixel.graphics.frames.FlxAtlasFrames;
-import flixel.system.debug.interaction.tools.Pointer.GraphicCursorCross;
 
 import objects.Bar;
 import objects.Character;
@@ -15,6 +14,9 @@ import objects.HealthIcon;
 
 import states.editors.content.Prompt;
 import states.editors.content.PsychJsonPrinter;
+
+@:bitmap("assets/images/psych-ui/cursorCross.png")
+class GraphicCursorCross extends openfl.display.BitmapData {}
 
 class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler.PsychUIEvent
 {
@@ -1201,6 +1203,14 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 				}
 			}
 		}
+
+		characterList.sort(function(a:String, b:String):Int{
+			a = a.toUpperCase();
+			b = b.toUpperCase();
+			if(a < b){ return -1; }
+			else if(a > b){ return 1; }
+			else{ return 0; }
+		});
 
 		charDropDown.list = characterList;
 		charDropDown.selectedLabel = _char;

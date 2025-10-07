@@ -14,7 +14,7 @@ class Language
 		if (langFile == ClientPrefs.defaultData.language)
 			return AlphaCharacter.loadAlphabetData(stackItem);
 
-		var loadedText:Array<String> = Paths.mergeAllTextsNamed('data/$langFile.lang');
+		var loadedText:Array<String> = Paths.mergeAllTextsNamed('translations/$langFile.lang');
 		//trace(loadedText);
 
 		phrases.clear();
