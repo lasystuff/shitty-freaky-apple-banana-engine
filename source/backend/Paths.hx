@@ -408,9 +408,9 @@ class Paths {
 	#if MODS_ALLOWED
 	inline static var MODS_DIRECTORY:String =
 	#if (REDIRECT_ASSETS_FOLDER && macos)
-    "../../../../../../../mods"
+    "../../../../../../../example_mods"
     #elseif REDIRECT_ASSETS_FOLDER
-    "../../../../mods"
+    "../../../../example_mods"
     #else
     "mods"
     #end;

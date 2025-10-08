@@ -24,3 +24,4 @@ art/build_html.bat
 art/build_html-debug.bat
 vscode-project.hxml
 .DS_Store
+/example_mods

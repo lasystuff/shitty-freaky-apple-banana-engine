@@ -139,7 +139,6 @@ class PlayState extends MusicBeatState
 	public var playerStrums:FlxTypedGroup<StrumNote> = new FlxTypedGroup();
 	public var grpNoteSplashes:FlxTypedGroup<NoteSplash> = new FlxTypedGroup();
 
-	public var camZoomingMult:Float = 1;
 	public var camZoomingDecay:Float = 1;
 
 	public var gfSpeed:Int = 1;
@@ -196,6 +195,8 @@ class PlayState extends MusicBeatState
 	public static var deathCounter:Int = 0;
 
 	public var defaultCamZoom:Float = 1.05;
+
+	public var camZoomLerp:Float = 0;
 	public var camZoomMult:Float = 1;
 
 	// how big to stretch the pixel art assets
@@ -307,7 +308,7 @@ class PlayState extends MusicBeatState
 		GameOverSubstate.resetVariables();
 		songName = SONG.path;
 
-		defaultCamZoom = stageData.defaultZoom;
+		camZoomLerp = defaultCamZoom = stageData.defaultZoom;
 
 		stageUI = "normal";
 		if (stageData.stageUI != null && stageData.stageUI.trim().length > 0)
@@ -1511,7 +1512,7 @@ class PlayState extends MusicBeatState
 
 		camFollowFinal.setPosition(camFollow.x + camFollowOffset.x, camFollow.y + camFollowOffset.y);
 		FlxG.camera.followLerp = 1;
-		
+
 		if(!endingSong && !inCutscene && allowDebugKeys)
 		{
 			if (controls.justPressed('debug_1') && callOnScripts('onChartEditor', null, true) != Function_Stop)
@@ -1561,7 +1562,8 @@ class PlayState extends MusicBeatState
 			}
 		}
 
-		FlxG.camera.zoom = FlxMath.lerp(defaultCamZoom * camZoomMult, FlxG.camera.zoom, FlxMath.bound(1 - (elapsed * 3.125 * camZoomingDecay * playbackRate), 0, 1));
+		camZoomLerp = FlxMath.lerp(0, camZoomLerp, FlxMath.bound(1 - (elapsed * 3.125 * camZoomingDecay * playbackRate), 0, 1));
+		FlxG.camera.zoom = (defaultCamZoom * camZoomMult) + camZoomLerp;
 		camHUD.zoom = FlxMath.lerp(1, camHUD.zoom, FlxMath.bound(1 - (elapsed * 3.125 * camZoomingDecay * playbackRate), 0, 1));
 
 
@@ -1875,8 +1877,8 @@ class PlayState extends MusicBeatState
 				gfSpeed = Math.round(value1);
 
 			case 'Add Camera Zoom':
-				if(prefs.camZooms && FlxG.camera.zoom < 1.35) {
-					FlxG.camera.zoom += value1.toFloat() ?? 0.015;
+				if(prefs.camZooms && camZoomLerp < 0.35) {
+					camZoomLerp += value1.toFloat() ?? 0.015;
 					camHUD.zoom += value2.toFloat() ?? 0.03;
 				}
 
@@ -3029,11 +3031,10 @@ class PlayState extends MusicBeatState
 			if (generatedMusic && !endingSong && !isCameraOnForcedPos)
 				focusCameraSection();
 
-			if (FlxG.camera.zoom < 1.35 && prefs.camZooms)
-			{
-				FlxG.camera.zoom += 0.015 * camZoomingMult;
-				camHUD.zoom += 0.03 * camZoomingMult;
-			}
+			if (camZoomLerp < 0.35 && prefs.camZooms)
+				camZoomLerp += 0.015;
+			if (camHUD.zoom < 1.35 && prefs.camZooms)
+				camHUD.zoom += 0.03;
 
 			if (SONG.notes[curSection].changeBPM)
 			{
