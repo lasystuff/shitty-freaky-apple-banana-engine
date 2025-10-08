@@ -498,13 +498,13 @@ class PlayState extends MusicBeatState
 		startingSong = true;
 
 		for (notetype in noteTypes) {
-			startLuasNamed('custom_notetypes/' + notetype + '.lua');
-			startHScriptsNamed('custom_notetypes/' + notetype + '.hx');
+			startLuasNamed('notetypes/' + notetype + '.lua');
+			startHScriptsNamed('notetypes/' + notetype + '.hx');
 			stage?.initNoteType(notetype);
 		}
 		for (event in eventsPushed) {
-			startLuasNamed('custom_events/' + event + '.lua');
-			startHScriptsNamed('custom_events/' + event + '.hx');
+			startLuasNamed('events/' + event + '.lua');
+			startHScriptsNamed('events/' + event + '.hx');
 			stage?.initEvent(event);
 		}
 		noteTypes = null;

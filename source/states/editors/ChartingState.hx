@@ -2948,10 +2948,10 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 		if(eventDropDown != null)
 		{
 			eventsList.clearArray();
-			var eventFiles:Array<String> = loadFileList('custom_events/', ['.txt']);
+			var eventFiles:Array<String> = loadFileList('events/', ['.txt']);
 			for (file in eventFiles)
 			{
-				var desc:String = Paths.getTextFromFile('custom_events/$file.txt');
+				var desc:String = Paths.getTextFromFile('events/$file.txt');
 				eventsList.push([file, desc]);
 			}
 
@@ -2979,7 +2979,7 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 			var exts:Array<String> = ['.txt'];
 			#if LUA_ALLOWED exts.push('.lua'); #end
 			#if HSCRIPT_ALLOWED exts.push('.hx'); #end
-			noteTypes = loadFileList('custom_notetypes/', exts);
+			noteTypes = loadFileList('notetypes/', exts);
 			for (id => noteType in Note.defaultNoteTypes)
 				if(!noteTypes.contains(noteType))
 					noteTypes.insert(id, noteType);

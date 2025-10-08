@@ -13,8 +13,8 @@ class Mods
 	static public var currentModDirectory:String;
 	public static final ignoreModFolders:Array<String> = [
 		'characters',
-		'custom_events',
-		'custom_notetypes',
+		'events',
+		'notetypes',
 		'data',
 		'songs',
 		'music',
