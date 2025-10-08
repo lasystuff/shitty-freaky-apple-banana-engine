@@ -53,9 +53,6 @@ class MusicBeatSubstate extends FlxSubState
 			}
 		}
 
-		if (Main.fullscreenAllowed && FlxG.keys.justPressed.F11)
-			FlxG.fullscreen = !FlxG.fullscreen;
-
 		super.update(elapsed);
 	}
 

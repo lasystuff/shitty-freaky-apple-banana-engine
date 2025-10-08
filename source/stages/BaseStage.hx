@@ -1,7 +1,6 @@
 package stages;
 
 import flixel.FlxBasic;
-import flixel.FlxObject;
 import flixel.util.typeLimit.OneOfTwo;
 
 import objects.Character;
@@ -94,7 +93,7 @@ class BaseStageWithoutDefaultStageObjects {
 	var camOther(get, never):FlxCamera;
 
 	var defaultCamZoom(get, set):Float;
-	var camFollow(get, never):FlxObject;
+	var camFollow(get, never):FlxPoint;
 
 	var skipNextTransIn(get, set):Bool;
 	var skipNextTransOut(get, set):Bool;
@@ -109,8 +108,8 @@ class BaseStageWithoutDefaultStageObjects {
 	function triggerEvent(name:String, value1:OneOfTwo<Float, String>, value2:OneOfTwo<Float, String>) return game.triggerEvent(name, value1, value2);
 	inline function startCountdown() return game.startCountdown();
 	inline function endSong() return game.endSong();
-	inline function moveCamera(isDad:Bool) return game.moveCamera(isDad);
-	inline function moveCameraSection(?sec:Null<Int>) return game.moveCameraSection(sec);
+	inline function focusCamera(target:String) return game.focusCamera(target);
+	inline function focusCameraSection(?sec:Null<Int>) return game.focusCameraSection(sec);
 
 	inline function add(object:FlxBasic) return game.add(object);
 	inline function remove(object:FlxBasic, splice:Bool = false) return game.remove(object, splice);

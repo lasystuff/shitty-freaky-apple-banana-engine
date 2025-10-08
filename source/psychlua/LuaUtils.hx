@@ -93,7 +93,7 @@ class LuaUtils
 	}
 	public static function getVarInArray(instance:Dynamic, variable:String, allowMaps:Bool = false):Any
 	{
-		var vars = PlayState.instance.variables;
+		var vars = ScriptUtil.variables;
 		var splitProps:Array<String> = variable.split('[');
 		if(splitProps.length > 1)
 		{

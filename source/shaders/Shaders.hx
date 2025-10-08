@@ -53,30 +53,9 @@ class BaseEffect extends FlxBasic {
 			shader.data.iTime.value = [0];
 			FlxG.state.add(this);
 		}
-		shaderCoordsFix();
 	}
 	override function update(elapsed:Float) {
 		super.update(elapsed);
 		shader.data.iTime.value[0] += elapsed;
-	}
-
-	function shaderCoordsFix() {
-		if (Type.getClassFields(Main).contains('resetSpriteCache')) // it already in engine in 0.7 and later lol
-			return;
-
-		var func = (w, h) -> {
-			if (FlxG.cameras != null) for (cam in FlxG.cameras.list)
-				@:privateAccess if (cam != null && cam.filters != null) {
-					cam.flashSprite.__cacheBitmap = null;
-					cam.flashSprite.__cacheBitmapData = null;
-				}
-
-			@:privateAccess if (FlxG.game != null) {
-				FlxG.game.__cacheBitmap = null;
-				FlxG.game.__cacheBitmapData = null;
-			}
-		}
-		if (!FlxG.signals.gameResized.has(func))
-			FlxG.signals.gameResized.add(func);
 	}
 }

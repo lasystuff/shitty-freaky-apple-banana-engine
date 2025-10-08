@@ -290,7 +290,7 @@ class ClientPrefs {
 
 		if(FlxG.save.data.fullscreen != null)
 			FlxG.fullscreen = FlxG.save.data.fullscreen;
-		Main.onFullscreenChange.add(() -> {
+		Init.onFullscreenChange.add(() -> {
 			FlxG.save.data.fullscreen = FlxG.fullscreen;
 		});
 

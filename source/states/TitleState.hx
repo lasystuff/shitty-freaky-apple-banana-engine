@@ -10,8 +10,6 @@ import flixel.input.gamepad.FlxGamepad;
 
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
-
-import debug.GPUStats;
 import shaders.ColorSwap;
 
 import states.MainMenuState;
@@ -60,16 +58,6 @@ class TitleState extends MusicBeatState
 
 	public static function initialize() {
 		if (initialized) return;
-
-		#if LUA_ALLOWED
-		Mods.pushGlobalMods();
-		#end
-		Mods.loadTopMod();
-
-		ClientPrefs.loadPrefs();
-		//Language.reloadPhrases(); // commented cuz it already does that in Paths.clearStoredMemory()
-		GPUStats.init();
-
 		initialized = true;
 	}
 

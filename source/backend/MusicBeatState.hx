@@ -4,10 +4,14 @@ import flixel.FlxState;
 import flixel.addons.transition.FlxTransitionableState;
 
 import backend.PsychCamera;
+import psychlua.HScript;
 import psychlua.CustomState;
 
 class MusicBeatState extends FlxState
 {
+	public static final UNSCRIPTABLE_STATE:Array<String> = ["Init", "PlayState", "CustomState", "ChartingState"];
+	public var script:HScript;
+
 	private var curSection:Int = 0;
 	private var stepsToDo:Int = 0;
 
@@ -32,9 +36,10 @@ class MusicBeatState extends FlxState
 
 	var _psychCameraInitialized:Bool = false;
 
-	public var variables:Map<String, Dynamic> = [];
+	// public var variables:Map<String, Dynamic> = [];
+	// deprecated
 	public static function getVariables()
-		return getState().variables;
+		return util.ScriptUtil.variables;
 
 	override function create() {
 		#if MODS_ALLOWED Mods.updatedOnState = false; #end
@@ -48,6 +53,26 @@ class MusicBeatState extends FlxState
 
 		skipNextTransOut = false;
 		timePassedOnState = 0;
+
+		if (!UNSCRIPTABLE_STATE.contains(getName()) && Paths.path('states/${getName()}.hx') != null)
+		{
+			// Todo: add debug texts etc
+			if (script == null)
+				script = new HScript(null, Paths.path('states/${getName()}.hx'));
+
+			script.set("add", add);
+			script.set("remove", remove);
+			script.set("members", members);
+
+			script.set("controls", controls);
+			script.set("prefs", prefs);
+			script.set("gameplayPrefs", gameplayPrefs);
+
+			script.set("setSkipNextTransOut", function(v:Bool) skipNextTransOut = v);
+			script.set("setSkipNextTransIn", function(v:Bool) skipNextTransIn = v);
+		}
+
+		script?.executeFunction('create');
 	}
 
 	public function initPsychCamera():PsychCamera
@@ -84,10 +109,18 @@ class MusicBeatState extends FlxState
 			}
 		}
 
-		if (Main.fullscreenAllowed && FlxG.keys.justPressed.F11)
-			FlxG.fullscreen = !FlxG.fullscreen;
+		if (FlxG.keys.justPressed.F5)
+			FlxG.resetState();
 
 		super.update(elapsed);
+
+		script?.set("curStep", curStep);
+		script?.set("curBeat", curBeat);
+
+		script?.set("curDecStep", curDecStep);
+		script?.set("curDecBeat", curDecBeat);
+
+		script?.executeFunction('update', [elapsed]);
 	}
 
 	private function updateSection():Void
@@ -148,14 +181,18 @@ class MusicBeatState extends FlxState
 	}
 
 	/** @param dumpCache If `true`, calls `Paths.clearStoredMemory()` on next state pre-create, also increases loading times by a LOT. */
-	public static function switchState(nextState:FlxState, ?dumpCache:Bool = false) {
+	public static function switchState(nextState:MusicBeatState, ?dumpCache:Bool = false) {
 		if (dumpCache) FlxG.signals.preStateCreate.addOnce(_ -> Paths.clearStoredMemory());
 
-		var clsName = Type.getClassName(Type.getClass(nextState)).split(".")[Type.getClassName(Type.getClass(nextState)).split(".").length - 1];
-		if (Paths.path("states/" + clsName + ".hx") != null)
-			nextState = new CustomState(clsName);
+		if (!UNSCRIPTABLE_STATE.contains(nextState.getName()) && Paths.path('states/override/${nextState.getName()}.hx') != null)
+			nextState = new CustomState('override/${nextState.getName()}');
 
 		FlxG.switchState(nextState);
+	}
+
+	public static function switchCustomState(nextState:String, ?dumpCache:Bool = false) {
+		if (dumpCache) FlxG.signals.preStateCreate.addOnce(_ -> Paths.clearStoredMemory());
+		FlxG.switchState(new CustomState(nextState));
 	}
 
 	public static function resetState()
@@ -169,10 +206,12 @@ class MusicBeatState extends FlxState
 	{
 		if (curStep % 4 == 0)
 			beatHit();
+		script?.executeFunction('stepHit');
 	}
 
 	public function beatHit():Void
 	{
+		script?.executeFunction('beatHit');
 		//trace('Beat: ' + curBeat);
 	}
 
@@ -181,8 +220,20 @@ class MusicBeatState extends FlxState
 		//trace('Section: ' + curSection + ', Beat: ' + curBeat + ', Step: ' + curStep);
 	}
 
+	// only destroy() will run script's function before
+	override public function destroy()
+	{
+		script?.executeFunction('destroy');
+		script?.destroy();
+
+		super.destroy();
+	}
+
 	function getBeatsOnSection():Float
 		return Conductor.getSectionBeatsFromSong(curSection);
+
+	public function getName()
+		return Type.getClassName(Type.getClass(this)).split(".")[Type.getClassName(Type.getClass(this)).split(".").length - 1];
 
 	@:noCompletion function get_skipNextTransOut():Bool return FlxTransitionableState.skipNextTransOut;
 	@:noCompletion function set_skipNextTransOut(v:Bool):Bool return FlxTransitionableState.skipNextTransOut = v;

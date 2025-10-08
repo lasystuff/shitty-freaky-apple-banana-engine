@@ -758,19 +758,11 @@ class FunkinLua {
 			}
 		});
 		set("cameraSetTarget", function(target:String) {
-			switch(target.trim().toLowerCase())
-			{
-				case 'gf', 'girlfriend':
-					game.moveCameraToGirlfriend();
-				case 'dad', 'opponent':
-					game.moveCamera(true);
-				default:
-					game.moveCamera(false);
-			}
+			game.focusCamera(target.trim().toLowerCase());
 		});
 
 		set("setCameraScroll", function(x:Float, y:Float) FlxG.camera.scroll.set(x - FlxG.width/2, y - FlxG.height/2));
-		set("setCameraFollowPoint", game.camFollow.setPosition);
+		set("setCameraFollowPoint", game.camFollow.set);
 		set("addCameraScroll", FlxG.camera.scroll.add);
 		set("addCameraFollowPoint", function(?x:Float = 0, ?y:Float = 0) {
 			game.camFollow.x += x;
@@ -956,7 +948,7 @@ class FunkinLua {
 		});
 
 		set("setScrollFactor", function(obj:String, scrollX:Float, scrollY:Float) {
-			var luaObj = game.getLuaObject(obj);
+			var luaObj = ScriptUtil.variables.get(obj);
 			if(luaObj != null) {
 				luaObj.scrollFactor.set(scrollX, scrollY);
 				return;
@@ -983,8 +975,8 @@ class FunkinLua {
 			}
 		});
 		set("setGraphicSize", function(obj:String, x:Float, y:Float = 0, updateHitbox:Bool = true) {
-			if(game.getLuaObject(obj)!=null) {
-				var shit:FlxSprite = game.getLuaObject(obj);
+			if(ScriptUtil.variables.get(obj)!=null) {
+				var shit:FlxSprite = ScriptUtil.variables.get(obj);
 				shit.setGraphicSize(x, y);
 				if(updateHitbox) shit.updateHitbox();
 				return;
@@ -1004,8 +996,8 @@ class FunkinLua {
 			debugPrint('setGraphicSize: Couldnt find object: $obj', FlxColor.RED);
 		});
 		set("scaleObject", function(obj:String, x:Float, y:Float, updateHitbox:Bool = true) {
-			if(game.getLuaObject(obj)!=null) {
-				var shit:FlxSprite = game.getLuaObject(obj);
+			if(ScriptUtil.variables.get(obj)!=null) {
+				var shit:FlxSprite = ScriptUtil.variables.get(obj);
 				shit.scale.set(x, y);
 				if(updateHitbox) shit.updateHitbox();
 				return;
@@ -1025,8 +1017,8 @@ class FunkinLua {
 			debugPrint('scaleObject: Couldnt find object: $obj', FlxColor.RED);
 		});
 		set("updateHitbox", function(obj:String) {
-			if(game.getLuaObject(obj)!=null) {
-				var shit:FlxSprite = game.getLuaObject(obj);
+			if(ScriptUtil.variables.get(obj)!=null) {
+				var shit:FlxSprite = ScriptUtil.variables.get(obj);
 				shit.updateHitbox();
 				return;
 			}
@@ -1092,7 +1084,7 @@ class FunkinLua {
 		});
 
 		set("setObjectCamera", function(obj:String, camera:String = 'game') {
-			var real = game.getLuaObject(obj);
+			var real = ScriptUtil.variables.get(obj);
 			if(real!=null){
 				real.cameras = [LuaUtils.cameraFromString(camera)];
 				return true;
@@ -1112,7 +1104,7 @@ class FunkinLua {
 			return false;
 		});
 		set("setBlendMode", function(obj:String, blend:String = '') {
-			var real = game.getLuaObject(obj);
+			var real = ScriptUtil.variables.get(obj);
 			if(real != null) {
 				real.blend = LuaUtils.blendModeFromString(blend);
 				return true;
@@ -1132,7 +1124,7 @@ class FunkinLua {
 			return false;
 		});
 		set("screenCenter", function(obj:String, pos:String = 'xy') {
-			var spr:FlxObject = game.getLuaObject(obj);
+			var spr:FlxObject = ScriptUtil.variables.get(obj);
 
 			if(spr==null){
 				var split:Array<String> = obj.split('.');
@@ -1164,7 +1156,7 @@ class FunkinLua {
 			var objectsArray:Array<FlxSprite> = [];
 			for (i in 0...namesArray.length)
 			{
-				var real = game.getLuaObject(namesArray[i]);
+				var real = ScriptUtil.variables.get(namesArray[i]);
 				if(real!=null) {
 					objectsArray.push(real);
 				} else {

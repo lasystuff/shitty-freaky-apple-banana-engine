@@ -112,9 +112,13 @@ class FPSCounter extends TextField
 
 	var pressedF3Lines:Array<String> = [
 		'%file% %modVer% (%psychVer%)',
-		'%fps% fps T: %maxFPS% %quality% %antialiasing%',
-		'RAM: %ram% GPU: %gpuUsgMem% %caching%',
+		'%fps% fps (T: %maxFPS%)',
+		'%quality%   %antialiasing%',
+		'RAM: %ram%',
+		#if windows 
+		'GPU: %gpuUsgMem% %caching%',
 		'GPU: %gpuUsg%% (%gpuUsgGlobal%%) %shaders%',
+		#end
 		'',
 		'mouseXY: %mouseX% / %mouseY%',
 		'',
@@ -152,21 +156,16 @@ class FPSCounter extends TextField
 	 */
 	public dynamic function resetTextFormat() {
 		var lines:Array<String> = [];
-		#if windows
 		if (pressedF3)
 			lines = lines.concat(pressedF3Lines);
 		else {
 			lines.push(states.MainMenuState.modVersion + (prefs.showFPS ? ' | FPS: %fps%' : ''));
 
 			if (prefs.memoryCounter)
-				lines.push('Mem: %ram% / %gpuUsgMem%');
+				lines.push('Mem: %ram%' #if windows + ' / %gpuUsgMem%' #end);
 			if (!wasPressedF3)
 				lines.push('F3 to expand (press to close tip)');
 		}
-		#else
-			if (prefs.showFPS) lines.push('FPS: %fps%');
-			if (prefs.memoryCounter) lines.push('Memory: %ram%');
-		#end
 
 		textFormat = lines.join('\n');
 		updateText();
@@ -179,18 +178,21 @@ class FPSCounter extends TextField
 			'ram' => FlxStringUtil.formatBytes(memoryMegas),
 			#if windows
 			'gpuUsgMem' => (GPUStats.errorMessage == null ? FlxStringUtil.formatBytes(GPUStats.memoryUsage) : 'Error!'),
+			#end
 			'file' => FlxG.stage.application.meta.get('file'),
 			'modVer' => MainMenuState.modVersion,
 			'psychVer' => '${MainMenuState.psychEngineVersion} (${MainMenuState.psychEngineLastCommit})',
 			'maxFPS' => prefs.framerate + '',
-			'quality' => (prefs.lowQuality ? 'low' : 'high') + 'Quality',
-			'antialiasing' => (prefs.antialiasing ? 'a' : 'noA') + 'ntialiasing',
+			'quality' => (prefs.lowQuality ? 'low ' : 'high ') + 'quality',
+			'antialiasing' => (prefs.antialiasing ? 'using a' : 'no a') + 'ntialiasing',
 			'shaders' => (prefs.shaders ? 's' : 'noS') + 'haders',
 			'caching' => (prefs.cacheOnGPU ? 'gpu' : 'ram') + 'Caching',
+			#if windows
 			'gpuUsg' => Std.int(GPUStats.usage) + '',
 			'gpuUsgGlobal' => Std.int(GPUStats.globalUsage) + '',
-			'mouseX' => FlxG.mouse.screenX + '',
-			'mouseY' => FlxG.mouse.screenY + '',
+			#end
+			'mouseX' => FlxG.mouse.x + '',
+			'mouseY' => FlxG.mouse.y + '',
 			'haxe' => d.get('haxe'),
 			'lime' => d.get('lime'),
 			'openfl' => d.get('openfl'),
@@ -215,7 +217,6 @@ class FPSCounter extends TextField
 			#end
 			#if flxanimate
 			'flxanimate' => d.get('flxanimate'),
-			#end
 			#end
 		];
 

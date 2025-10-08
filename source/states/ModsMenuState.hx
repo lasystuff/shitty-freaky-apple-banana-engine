@@ -311,6 +311,8 @@ class ModsMenuState extends MusicBeatState
 					FreeplayState.vocals = null;
 				}
 				FlxG.camera.fade(FlxColor.BLACK, 0.5, false, FlxG.resetGame, false);
+
+				Init.reloadInitScripts();
 			}
 			else MusicBeatState.switchState(new MainMenuState());
 

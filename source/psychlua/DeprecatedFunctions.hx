@@ -21,7 +21,7 @@ class DeprecatedFunctions
 
 		lua.set("objectPlayAnimation", function(obj:String, name:String, forced:Bool = false, ?startFrame:Int = 0) {
 			debugPrint("objectPlayAnimation is deprecated! Use playAnim instead");
-			var luaObj = PlayState.instance.getLuaObject(obj);
+			var luaObj = ScriptUtil.variables.get(obj);
 			if(luaObj != null) {
 				luaObj.animation.play(name, forced, false, startFrame);
 				return true;

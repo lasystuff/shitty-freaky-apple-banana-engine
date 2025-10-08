@@ -73,7 +73,7 @@ class WindowUtil {
 
 		window.resizable = false;
 		#if windows Windows.removeMaximizeMinimizeButtons(); #end
-		Main.fullscreenAllowed = false;
+		Init.fullscreenAllowed = false;
 	}
 
 	static function disableForceWindowMode() {
@@ -86,7 +86,7 @@ class WindowUtil {
 
 		FlxG.stage.window.resizable = true;
 		#if windows Windows.addMaximizeMinimizeButtons(); #end
-		Main.fullscreenAllowed = true;
+		Init.fullscreenAllowed = true;
 	}
 
 	@:noCompletion private static var wasFullscreen:Bool;

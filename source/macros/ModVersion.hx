@@ -5,7 +5,7 @@ import sys.io.File;
 import sys.FileSystem;
 
 class ModVersion {
-	inline static final VERSION_FORMAT:String = "v%ymd%.%buildNumber%";
+	inline static final VERSION_FORMAT:String = "%ymd%.%buildNumber%";
 	public static function add():Array<Field> {
 		var curDate = Date.now();
 		var ymd = DateTools.format(curDate, "%Y%m%d");

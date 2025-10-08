@@ -6,7 +6,6 @@ import openfl.display.Sprite;
 import openfl.display.StageScaleMode;
 
 import flixel.FlxGame;
-import flixel.util.FlxSignal;
 
 import backend.AudioUtil;
 import backend.Highscore;
@@ -24,10 +23,6 @@ import openfl.events.UncaughtErrorEvent;
 
 #if windows
 import backend.native.Windows;
-#end
-
-#if LUA_ALLOWED
-import llua.Lua;
 #end
 
 #if linux
@@ -57,7 +52,7 @@ class Main extends Sprite
 	public var game = {
 		width: 1280, // WINDOW width
 		height: 720, // WINDOW height
-		initialState: states.TitleState, // initial game state
+		initialState: Init, // initial game state
 		zoom: -1.0, // game state bounds
 		framerate: 60, // default framerate
 		skipSplash: true, // if the default flixel splash screen should be skipped
@@ -71,11 +66,6 @@ class Main extends Sprite
 	public static var isDarkMode(default, null):Bool = false;
 	/** Color mode of title window, works on Windows target only */
 	public static var titleWindowColorMode:TitleWindowColorMode = DEFAULT;
-
-	/** if `false`, you cant change fullscreen by `Alt+Enter` or `F11` */
-	public static var fullscreenAllowed:Bool = true;
-	/** dispatches on each fullscreen change */
-	public static var onFullscreenChange:FlxSignal = new FlxSignal();
 
 	// You can pretty much ignore everything from here on - your code should go in your states.
 
@@ -125,7 +115,6 @@ class Main extends Sprite
 		setupGame();
 	}
 
-	#if windows
 	static function startOfTrace(fileName:String, lineNumber:Int) {
 		// so its like:    [03:17:48] [debug/GPUStats:75] Traced string yeah
 		// and colors are:    blue           cyan            basic (white)
@@ -134,7 +123,6 @@ class Main extends Sprite
 
 		return '$time $path ';
 	}
-	#end
 
 	public static function println(str:Dynamic) {
 		#if js
@@ -163,7 +151,6 @@ class Main extends Sprite
 			game.height = Math.ceil(stageHeight / game.zoom);
 		}
 
-		#if windows
 		// cuz idk if it will work on other platforms
 		// cool improving of trace() thing! - TheLeerName
 		// useful batch btw!
@@ -176,84 +163,8 @@ class Main extends Sprite
 			// so Paths.callStackTrace displays states/TitleState.hx, and trace displays states/TitleState
 			// haha!
 		}
-		#end
-
-		#if windows
-		var time:Float = 0; var prev:Float = -1;
-		addEventListener(Event.ENTER_FRAME, e -> {
-			time += FlxG.elapsed;
-			if (Std.int(prev) != Std.int(time)) {
-				isDarkMode = Windows.allowDarkMode();
-				AudioUtil.checkForDisconnect();
-			}
-			prev = time;
-
-			switch(titleWindowColorMode) {
-				case RED_GLOW:
-					var v = Math.sin(time * 5) / 2; // from -0.5 to 0.5
-					if (isDarkMode) Windows.setTextColorFromRGBFloat(1, 0.5 + v, 0.5 + v);
-					else Windows.setTextColorFromRGBFloat(0.5 + v, 0, 0);
-				case RAINBOW:
-					Windows.setTextColor(FlxColor.fromHSB(time * 250, 0.75, 0.75));
-				case DEFAULT:
-					Windows.setTextColor(isDarkMode.boolToInt() * 0xffffff);
-				// you can add your custom glows here!
-				default:
-			}
-		});
-		#end
-
-		#if LUA_ALLOWED Lua.set_callbacks_function(cpp.Callable.fromStaticFunction(psychlua.CallbackHandler.call)); #end
-		Controls.instance = new Controls();
-		ClientPrefs.loadDefaultKeys();
-		Paths.resetDirectories();
 
 		addChild(new FlxGame(game.width, game.height, game.initialState, game.framerate, game.framerate, game.skipSplash, game.startFullscreen));
-		FlxG.cameras.cameraAdded.add(c -> c.filters = []);
-		FlxG.game.filters = [];
-		FlxG.sound.music ??= new FlxSound();
-
-		#if debug
-		var classesToRegister:Array<Class<Dynamic>> = [
-			Main,
-			backend.ClientPrefs,
-			backend.Conductor,
-			backend.Controls,
-			backend.CoolUtil,
-			backend.Difficulty,
-			backend.Highscore,
-			backend.Json,
-			backend.Language,
-			backend.Mods,
-			backend.MusicBeatState,
-			backend.MusicBeatSubstate,
-			backend.Paths,
-			backend.Song,
-			backend.WeekData,
-			psychlua.LuaUtils,
-			states.PlayState,
-			util.StaticExtensions,
-
-			#if windows
-			debug.GPUStats,
-			backend.native.Windows,
-			#end
-
-			#if !flash
-			shaders.Shaders,
-			#end
-		];
-		for (cl in classesToRegister) FlxG.game.debugger.console.registerClass(cl);
-		#end
-
-		FlxG.stage.addEventListener("keyDown", event -> {
-			if (event.keyCode == openfl.ui.Keyboard.F11 || (event.altKey && event.keyCode == openfl.ui.Keyboard.ENTER)) {
-				if (fullscreenAllowed)
-					new FlxTimer().start(FlxG.elapsed * 5, tmr -> { onFullscreenChange.dispatch(); });
-				else
-					@:privateAccess FlxG.stage.application.__backend.toggleFullscreen = false; // if setted to false, bro doesnt let toggle fullscreen in only NEXT toggle
-			}
-		});
 
 		#if !mobile
 		fpsVar = new FPSCounter(10, 3, 0xFFFFFF);
@@ -262,45 +173,9 @@ class Main extends Sprite
 		Lib.current.stage.scaleMode = StageScaleMode.NO_SCALE;
 		#end
 
-		#if linux
-		var icon = Image.fromFile("icon.png");
-		Lib.current.stage.window.setIcon(icon);
-		#end
-
-		#if html5
-		FlxG.autoPause = false;
-		FlxG.mouse.visible = false;
-		#end
-
-		FlxG.fixedTimestep = false;
-		FlxG.game.focusLostFramerate = 60;
-		FlxG.keys.preventDefaultKeys = [TAB];
-
 		#if CRASH_HANDLER
 		Lib.current.loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, onCrash);
 		#end
-
-		DiscordClient.prepare();
-
-		// shader coords fix
-		FlxG.signals.gameResized.add(function (w, h) {
-		     if (FlxG.cameras != null) {
-			   for (cam in FlxG.cameras.list) {
-				if (cam?.filters != null)
-					resetSpriteCache(cam.flashSprite);
-			   }
-			}
-
-			if (FlxG.game != null)
-			resetSpriteCache(FlxG.game);
-		});
-	}
-
-	static function resetSpriteCache(sprite:Sprite):Void {
-		@:privateAccess {
-		        sprite.__cacheBitmap = null;
-			sprite.__cacheBitmapData = null;
-		}
 	}
 
 	// Code was entirely made by sqirra-rng for their fnf engine named "Izzy Engine", big props to them!!!

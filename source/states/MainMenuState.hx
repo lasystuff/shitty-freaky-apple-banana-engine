@@ -81,7 +81,7 @@ class MainMenuState extends MusicBeatState
 			item.screenCenter(X);
 		}
 
-		var fnfVer:FlxText = new FlxText(12, FlxG.height - 44, 0, 'Shitty Freaky Apple Banana Engine', 12);
+		var fnfVer:FlxText = new FlxText(12, FlxG.height - 44, 0, 'shitty freaky apple banana engine', 12);
 		fnfVer.scrollFactor.set();
 		fnfVer.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(fnfVer);
