@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project xmlns="http://lime.openfl.org/project/1.0.4" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://lime.openfl.org/project/1.0.4 http://lime.openfl.org/xsd/project-1.0.4.xsd">
+
+	<!-- _________________________ Application Settings _________________________ -->
+
+	<app title="shitty freaky apple banana engine" file="Funkin" main="Main" version="0.0.1" company="Lasystuff" />
+
+	<app preloader="flixel.system.FlxPreloader" />
+	<set name="SWF_VERSION" value="11.8" />
+
+    <haxeflag name="-dce no" />
+
+	<!-- ____________________________ Window Settings ___________________________ -->
+
+	<window width="1280" height="720" fps="60" background="#000000" hardware="true" vsync="false" />
+	<window if="desktop" orientation="landscape" fullscreen="false" resizable="true" />
+
+	<!-- _____________________________ Path Settings ____________________________ -->
+
+	<set name="BUILD_DIR" value="export" />
+	<source path="src" />
+	<assets path="res" />
+    <assets path="mods" />
+
+	<!-- _______________________________ Libraries ______________________________ -->
+
+	<haxelib name="flixel" />
+    <haxelib name="flixel-addons" />
+    <haxelib name="flixel-controls" />
+    <haxelib name="rulescript" />
+
+	<!-- ______________________________ Haxedefines _____________________________ -->
+	
+    <haxedef name="FLX_NO_HEALTH" />
+	<haxedef name="FLX_NO_MOUSE" if="mobile" />
+	<haxedef name="FLX_NO_KEYBOARD" if="mobile" />
+	<haxedef name="FLX_NO_TOUCH" if="desktop" />
+	<haxedef name="FLX_NO_DEBUG" unless="debug" />
+	<haxedef name="NAPE_RELEASE_BUILD" unless="debug" />
+	<haxedef name="message.reporting" value="pretty" />
+
+    <haxedef name="hscriptPos" />
+
+    <!-- _________________________________ Macro _______________________________ -->
+    
+    <compilerflag name="--macro" value="include('funkin', true)" />
+
+	<!-- _________________________________ Custom _______________________________ -->
+</project>

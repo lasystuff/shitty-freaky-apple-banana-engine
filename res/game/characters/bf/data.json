@@ -1,0 +1,11 @@
+{
+    "animations": [
+        {
+            "id": "idle",
+            "prefix": "BF idle Dance",
+            "fps": 24,
+            "indices": []
+        }
+    ],
+    "missSounds": ["sfx/missnote1", "sfx/missnote2", "sfx/missnote3"]
+}

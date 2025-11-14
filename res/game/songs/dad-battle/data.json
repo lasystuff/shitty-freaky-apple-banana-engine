@@ -1,0 +1,17 @@
+{
+	"name": "Dadbattle",
+	"assets": {
+		"player": "bf",
+		"opponent": "dad",
+		"spectator": "gf",
+		"stage": "stage",
+		"ui": "default"
+	},
+	"meta": {
+		"artists": "Kawai Sprite",
+		"charter": "Ninjamuffin",
+		"version": "Friday Night Funkin' 0.2.1"
+	},
+	"difficulties": ["easy", "normal", "hard"],
+	"variations": ["erect", "pico"]
+}

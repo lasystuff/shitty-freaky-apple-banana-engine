@@ -1,0 +1,8 @@
+{
+	"name": "Dadbattle (Pico Mix)",
+	"assets": {
+		"player": "pico",
+		"spectator": "nene"
+	},
+	"difficulties": ["easy", "normal", "hard"]
+}

@@ -1,0 +1,22 @@
+[
+	{
+		"profile": "default",
+		"pkgs": [
+            {"name": "hxcpp"},
+			{"name": "openfl"},
+			{"name": "lime"},
+			{"name": "flixel"},
+			{"name": "flixel-addons"},
+			{"name": "flixel-controls"},
+			{
+				"name": "hscript",
+				"link": "https://github.com/HaxeFoundation/hscript"
+			},
+			{
+				"name": "rulescript",
+				"link": "https://github.com/Kriptel/RuleScript",
+				"branch": "dev"
+			}
+		]
+	}
+]
