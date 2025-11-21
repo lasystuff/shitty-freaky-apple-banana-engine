@@ -16,6 +16,10 @@
 				"name": "rulescript",
 				"link": "https://github.com/Kriptel/RuleScript",
 				"branch": "dev"
+			},
+			{
+				"name": "moonchart",
+				"link": "https://github.com/MaybeMaru/moonchart"
 			}
 		]
 	}
