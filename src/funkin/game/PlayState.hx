@@ -9,6 +9,7 @@ import flixel.math.FlxMath;
 
 import funkin.game.song.*;
 import funkin.game.note.*;
+import funkin.game.prop.*;
 
 class PlayState extends FlxState
 {
@@ -35,12 +36,14 @@ class PlayState extends FlxState
 	public var camGame:FlxCamera;
 
 	public var cameraFollow:FlxObject;
-	public var cameraZoom:Float = 1;
-	public var cameraZoomAdd:Float = 0;
+	public var cameraZoom:Float = 0;
+	public var cameraZoomBop:Float = 0;
 	public var cameraZoomRate:Float = 4;
 
 	public var opponentStrumline:Strumline;
 	public var playerStrumline:Strumline;
+
+	public var stage:Stage;
 
 	override public function create():Void
 	{
@@ -109,6 +112,9 @@ class PlayState extends FlxState
 		add(playerStrumline.notes);
 
 		playerStrumline.cameras = playerStrumline.notes.cameras = [camHUD];
+
+		stage = new Stage(song.assets.stage);
+		add(stage);
 	}
 
 	override public function update(elapsed:Float):Void
@@ -133,10 +139,9 @@ class PlayState extends FlxState
 			//
 		}
 
-		trace(camHUD.zoom);
-		camHUD.zoom = FlxMath.lerp(1, camHUD.zoom, Math.exp(-elapsed * 3.125));
-		cameraZoomAdd = FlxMath.lerp(0, cameraZoomAdd, Math.exp(-elapsed * 3.125));
-		camGame.zoom = cameraZoom + cameraZoomAdd;
+		cameraZoomBop = FlxMath.lerp(0, cameraZoomBop, Math.exp(-elapsed * 3.125));
+		camHUD.zoom = 1 + cameraZoomBop;
+		camGame.zoom = stage.zoom + cameraZoom + cameraZoomBop;
 	}
 
 	public function onStepHit(step:Int):Void
@@ -147,8 +152,7 @@ class PlayState extends FlxState
 	{
 		if (beat % cameraZoomRate == 0)
 		{
-			camHUD.zoom = 1.03;
-			cameraZoomAdd = 0.02;
+			cameraZoomBop = 0.02;
 		}
 	}
 }
