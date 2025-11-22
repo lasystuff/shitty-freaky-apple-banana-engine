@@ -2,6 +2,8 @@ package funkin.game;
 
 import flixel.FlxState;
 import flixel.FlxG;
+import flixel.FlxObject;
+import flixel.FlxCamera;
 import flixel.sound.FlxSound;
 import flixel.math.FlxMath;
 
@@ -28,6 +30,14 @@ class PlayState extends FlxState
 	public var inst:FlxSound;
 	public var opponentVoice:FlxSound;
 	public var playerVoice:FlxSound;
+
+	public var camHUD:FlxCamera;
+	public var camGame:FlxCamera;
+
+	public var cameraFollow:FlxObject;
+	public var cameraZoom:Float = 1;
+	public var cameraZoomAdd:Float = 0;
+	public var cameraZoomRate:Float = 4;
 
 	public var opponentStrumline:Strumline;
 	public var playerStrumline:Strumline;
@@ -71,6 +81,17 @@ class PlayState extends FlxState
 		inst.play();
 		if (playerVoice != null) playerVoice.play();
 		if (opponentVoice != null) opponentVoice.play();
+
+		camGame = new FlxCamera();
+		camHUD = new FlxCamera();
+		camHUD.bgColor.alpha = 0;
+
+		cameraFollow = new FlxObject(0, 0);
+		FlxG.camera.follow(cameraFollow, LOCKON);
+
+		FlxG.cameras.reset(camGame);
+		FlxG.cameras.add(camHUD, false);
+		FlxG.cameras.setDefaultDrawTarget(camGame, true);
 		
 		opponentStrumline = new Strumline(60, 30, DEFAULT, true, chart.speed);
 		trace(chart.opponent[0]);
@@ -79,11 +100,15 @@ class PlayState extends FlxState
 		add(opponentStrumline);
 		add(opponentStrumline.notes);
 
+		opponentStrumline.cameras = opponentStrumline.notes.cameras = [camHUD];
+
 		playerStrumline = new Strumline(42 + (FlxG.width / 2) + 25, 30, DEFAULT, false, chart.speed);
 		for (note in chart.player)
 			playerStrumline.addNoteToQueue(note);
 		add(playerStrumline);
 		add(playerStrumline.notes);
+
+		playerStrumline.cameras = playerStrumline.notes.cameras = [camHUD];
 	}
 
 	override public function update(elapsed:Float):Void
@@ -107,6 +132,11 @@ class PlayState extends FlxState
 					playerVoice.time = inst.time;
 			//
 		}
+
+		trace(camHUD.zoom);
+		camHUD.zoom = FlxMath.lerp(1, camHUD.zoom, Math.exp(-elapsed * 3.125));
+		cameraZoomAdd = FlxMath.lerp(0, cameraZoomAdd, Math.exp(-elapsed * 3.125));
+		camGame.zoom = cameraZoom + cameraZoomAdd;
 	}
 
 	public function onStepHit(step:Int):Void
@@ -115,5 +145,10 @@ class PlayState extends FlxState
 
 	public function onBeatHit(beat:Int):Void
 	{
+		if (beat % cameraZoomRate == 0)
+		{
+			camHUD.zoom = 1.03;
+			cameraZoomAdd = 0.02;
+		}
 	}
 }

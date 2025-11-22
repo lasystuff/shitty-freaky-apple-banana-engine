@@ -16,7 +16,7 @@ enum StrumInitAnimType
 
 class Strumline extends FlxTypedSpriteGroup<FlxSprite>
 {
-	public static final INPUT_DIRECTIONS:Array<funkin.data.Controls.Actions> = [LEFT, DOWN, UP, RIGHT];
+	public var inputs:Array<String> = ["note_left", "note_down", "note_up", "note_right"];
 
 
     public var notes:FlxTypedGroup<Note> = new FlxTypedGroup<Note>();
@@ -67,12 +67,8 @@ class Strumline extends FlxTypedSpriteGroup<FlxSprite>
 			strum.animation.onFinish.add(function(anim:String)
 			{
 				if (anim == "confirm")
-				{
-					if (cpu|| (!cpu && Controls.instance.checkDigital(INPUT_DIRECTIONS[i], JUST_PRESSED)))
-					{
+					if (cpu)
 						strum.animation.play('default', true);
-					}
-				}
 			});
 
 			// fuuuk scaling fuck fuck fuck
@@ -113,8 +109,12 @@ class Strumline extends FlxTypedSpriteGroup<FlxSprite>
 			}
 		}
 
+		if (!cpu)
+			input(elapsed);
+
 		for (note in notes.members)
 		{
+			note.updateStatus();
 			if (note.followStrum)
 			{
 				note.x = members[note.data.id].x;
@@ -124,9 +124,6 @@ class Strumline extends FlxTypedSpriteGroup<FlxSprite>
 			if (cpu && PlayState.instance.conductor.position >= note.data.time && note.status == HITTABLE)
 				onNoteHit.dispatch(note, false);
 		}
-
-		if (!cpu)
-			input(elapsed);
 	}
 
 	public function addNoteToQueue(note:ChartNote):Void
@@ -151,7 +148,37 @@ class Strumline extends FlxTypedSpriteGroup<FlxSprite>
 		}
 	}
 
+	var notePressTimer:Array<Float> = [0, 0, 0, 0];
+
 	function input(elapsed:Float):Void
 	{
+		for (i in 0...4)
+		{
+			if (Controls.instance.justReleased(inputs[i]))
+				members[i].animation.play("default");
+			if (Controls.instance.justPressed(inputs[i]))
+			{
+				members[i].animation.play("pressed");
+				notePressTimer[i] = 1;
+
+				var frameDirections:Array<Int> = [];
+				for (note in notes.members)
+				{
+					if (note.status == HITTABLE && notePressTimer[note.data.id] > 0 && !frameDirections.contains(note.data.id))
+					{
+						notePressTimer[note.data.id] = 0;
+						frameDirections.push(note.data.id);
+						note.hitDiff = PlayState.instance.conductor.position - note.data.time;
+						onNoteHit.dispatch(note, false);
+					}
+				}
+			}
+
+			notePressTimer[i] -= elapsed*5;
+			if (notePressTimer[i] <= 0)
+			{
+				notePressTimer[i] = 0;
+			}
+		}
 	}
 }

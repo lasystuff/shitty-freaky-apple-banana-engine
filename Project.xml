@@ -27,7 +27,6 @@
 
 	<haxelib name="flixel" />
     <haxelib name="flixel-addons" />
-    <haxelib name="flixel-controls" />
     <haxelib name="rulescript" />
 	<haxelib name="moonchart" />
 

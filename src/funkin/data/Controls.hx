@@ -1,39 +1,134 @@
 package funkin.data;
 
-import flixel.addons.input.FlxControls;
 import flixel.input.keyboard.FlxKey;
+import flixel.FlxG;
 
-enum Actions
+// from Psych Engine! fuck you flixel-controls!!!!1!!!
+class Controls
 {
-	LEFT;
-	DOWN;
-	UP;
-	RIGHT;
+	//Keeping same use cases on stuff for it to be easier to understand/use
+	//I'd have removed it but this makes it a lot less annoying to use in my opinion
 
-	UI_LEFT;
-	UI_DOWN;
-	UI_UP;
-	UI_RIGHT;
-}
+	//You do NOT have to create these variables/getters for adding new keys,
+	//but you will instead have to use:
+	//   controls.justPressed("ui_up")   instead of   controls.UI_UP
 
-class Controls extends FlxControls<Actions>
-{
+	//Dumb but easily usable code, or Smart but complicated? Your choice.
+	//Also idk how to use macros they're weird as fuck lol
+
+	// Pressed buttons (directions)
+	public var UI_UP_P(get, never):Bool;
+	public var UI_DOWN_P(get, never):Bool;
+	public var UI_LEFT_P(get, never):Bool;
+	public var UI_RIGHT_P(get, never):Bool;
+	public var NOTE_UP_P(get, never):Bool;
+	public var NOTE_DOWN_P(get, never):Bool;
+	public var NOTE_LEFT_P(get, never):Bool;
+	public var NOTE_RIGHT_P(get, never):Bool;
+	private function get_UI_UP_P() return justPressed('ui_up');
+	private function get_UI_DOWN_P() return justPressed('ui_down');
+	private function get_UI_LEFT_P() return justPressed('ui_left');
+	private function get_UI_RIGHT_P() return justPressed('ui_right');
+	private function get_NOTE_UP_P() return justPressed('note_up');
+	private function get_NOTE_DOWN_P() return justPressed('note_down');
+	private function get_NOTE_LEFT_P() return justPressed('note_left');
+	private function get_NOTE_RIGHT_P() return justPressed('note_right');
+
+	// Held buttons (directions)
+	public var UI_UP(get, never):Bool;
+	public var UI_DOWN(get, never):Bool;
+	public var UI_LEFT(get, never):Bool;
+	public var UI_RIGHT(get, never):Bool;
+	public var NOTE_UP(get, never):Bool;
+	public var NOTE_DOWN(get, never):Bool;
+	public var NOTE_LEFT(get, never):Bool;
+	public var NOTE_RIGHT(get, never):Bool;
+	private function get_UI_UP() return pressed('ui_up');
+	private function get_UI_DOWN() return pressed('ui_down');
+	private function get_UI_LEFT() return pressed('ui_left');
+	private function get_UI_RIGHT() return pressed('ui_right');
+	private function get_NOTE_UP() return pressed('note_up');
+	private function get_NOTE_DOWN() return pressed('note_down');
+	private function get_NOTE_LEFT() return pressed('note_left');
+	private function get_NOTE_RIGHT() return pressed('note_right');
+
+	// Released buttons (directions)
+	public var UI_UP_R(get, never):Bool;
+	public var UI_DOWN_R(get, never):Bool;
+	public var UI_LEFT_R(get, never):Bool;
+	public var UI_RIGHT_R(get, never):Bool;
+	public var NOTE_UP_R(get, never):Bool;
+	public var NOTE_DOWN_R(get, never):Bool;
+	public var NOTE_LEFT_R(get, never):Bool;
+	public var NOTE_RIGHT_R(get, never):Bool;
+	private function get_UI_UP_R() return justReleased('ui_up');
+	private function get_UI_DOWN_R() return justReleased('ui_down');
+	private function get_UI_LEFT_R() return justReleased('ui_left');
+	private function get_UI_RIGHT_R() return justReleased('ui_right');
+	private function get_NOTE_UP_R() return justReleased('note_up');
+	private function get_NOTE_DOWN_R() return justReleased('note_down');
+	private function get_NOTE_LEFT_R() return justReleased('note_left');
+	private function get_NOTE_RIGHT_R() return justReleased('note_right');
+
+
+	// Pressed buttons (others)
+	public var ACCEPT(get, never):Bool;
+	public var BACK(get, never):Bool;
+	public var PAUSE(get, never):Bool;
+	public var RESET(get, never):Bool;
+	private function get_ACCEPT() return justPressed('accept');
+	private function get_BACK() return justPressed('back');
+	private function get_PAUSE() return justPressed('pause');
+	private function get_RESET() return justPressed('reset');
+
+	//Gamepad & Keyboard stuff
+	public var keyboardBinds:Map<String, Array<FlxKey>>;
+	public function justPressed(key:String)
+	{
+		return FlxG.keys.anyJustPressed(keyboardBinds[key]);
+	}
+
+	public function pressed(key:String)
+	{
+		return FlxG.keys.anyPressed(keyboardBinds[key]);
+	}
+
+	public function justReleased(key:String)
+	{
+		return FlxG.keys.anyJustReleased(keyboardBinds[key]);
+	}
+
 	public static var instance:Controls;
 
-	override public function new(?id:String):Void
+	public function new():Void
 	{
-		super(id);
-
-		instance = this;
-	}
-	
-	function getDefaultMappings():ActionMap<Actions>
-	{
-		return [
-			LEFT => [FlxKey.LEFT, FlxKey.A],
-			DOWN => [FlxKey.DOWN, FlxKey.S],
-			UP => [FlxKey.UP, FlxKey.W],
-			RIGHT => [FlxKey.RIGHT, FlxKey.D]
+		keyboardBinds = [
+			'note_up'		=> [W, UP],
+			'note_left'		=> [A, LEFT],
+			'note_down'		=> [S, DOWN],
+			'note_right'	=> [D, RIGHT],
+			
+			'ui_up'			=> [W, UP],
+			'ui_left'		=> [A, LEFT],
+			'ui_down'		=> [S, DOWN],
+			'ui_right'		=> [D, RIGHT],
+			
+			'accept'		=> [SPACE, ENTER],
+			'back'			=> [BACKSPACE, ESCAPE],
+			'pause'			=> [ENTER, ESCAPE],
+			'reset'			=> [R],
+			
+			'volume_mute'	=> [ZERO],
+			'volume_up'		=> [NUMPADPLUS, PLUS],
+			'volume_down'	=> [NUMPADMINUS, MINUS],
+			
+			'debug_1'		=> [SEVEN],
+			'debug_2'		=> [EIGHT]
 		];
+	}
+
+	public static function init():Void
+	{
+		instance = new Controls();
 	}
 }
