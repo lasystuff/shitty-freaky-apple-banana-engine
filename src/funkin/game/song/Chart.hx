@@ -58,7 +58,7 @@ class Chart
             }
             
             chart.bpm = vslice.meta.timeChanges[0].bpm;
-            chart.speed = Reflect.field(vslice.data.scrollSpeed, difficulty) ?? 2;
+            chart.speed = Reflect.field(vslice.data.scrollSpeed, difficulty);
 
             chart.player = [];
             chart.opponent = [];
@@ -72,9 +72,9 @@ class Chart
                     type: note.k ?? ""
                 }
                 if (note.d > 3)
-                    chart.player.push(shittyNote);
-                else
                     chart.opponent.push(shittyNote);
+                else
+                    chart.player.push(shittyNote);
             }
 
             chart.events = [];

@@ -13,11 +13,7 @@ class Paths
 				return d.getPath(key);
 		}
 
-		// and last assets
-		if (FileSystem.exists("res/" + key))
-			return "res/" + key;
-
-		return null;
+		return "res/" + key;
 	}
 
 	public static function read(key:String):Array<String>

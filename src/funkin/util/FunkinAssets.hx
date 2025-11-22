@@ -9,6 +9,7 @@ import openfl.media.Sound;
 
 import flixel.FlxG;
 import flixel.graphics.FlxGraphic;
+import flixel.graphics.frames.FlxAtlasFrames;
 
 @:access(openfl.display.BitmapData)
 @:access(flixel.system.frontEnds.BitmapFrontEnd)
@@ -67,6 +68,13 @@ class FunkinAssets
 		if (!exists(id))
 			return null;
 		return File.getContent(id);
+	}
+
+	public static inline function getSparrow(id:String):FlxAtlasFrames
+	{
+		if (!exists(id + ".png"))
+			return null;
+		return FlxAtlasFrames.fromSparrow(getGraphic(id + ".png"), Xml.parse(getText(id + ".xml")));
 	}
 
 	public static inline function clearCache():Void

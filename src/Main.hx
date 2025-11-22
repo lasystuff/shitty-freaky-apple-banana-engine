@@ -3,6 +3,9 @@ package;
 import flixel.FlxGame;
 import openfl.display.Sprite;
 
+import flixel.FlxG;
+import flixel.FlxSprite;
+
 import moonchart.Moonchart;
 
 import funkin.game.PlayState;
@@ -14,6 +17,8 @@ class Main extends Sprite
 	public function new()
 	{
 		super();
+
+		FlxSprite.defaultAntialiasing = true;
 
 		Moonchart.init();
 

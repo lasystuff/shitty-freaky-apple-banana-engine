@@ -6,9 +6,11 @@ import flixel.sound.FlxSound;
 import flixel.math.FlxMath;
 
 import funkin.game.song.*;
+import funkin.game.note.*;
 
 class PlayState extends FlxState
 {
+	public static var instance:PlayState;
 	public static var playlist:Array<Song> = [];
 	
 	public static var song(get, never):Song;
@@ -27,6 +29,9 @@ class PlayState extends FlxState
 	public var opponentVoice:FlxSound;
 	public var playerVoice:FlxSound;
 
+	public var opponentStrumline:Strumline;
+	public var playerStrumline:Strumline;
+
 	override public function create():Void
 	{
 		// temp stuff
@@ -35,6 +40,8 @@ class PlayState extends FlxState
 		//
 
 		super.create();
+
+		instance = this;
 
 		conductor = new Conductor();
 		conductor.bpm = chart.bpm;
@@ -64,6 +71,19 @@ class PlayState extends FlxState
 		inst.play();
 		if (playerVoice != null) playerVoice.play();
 		if (opponentVoice != null) opponentVoice.play();
+		
+		opponentStrumline = new Strumline(60, 30, DEFAULT, true, chart.speed);
+		trace(chart.opponent[0]);
+		for (note in chart.opponent)
+			opponentStrumline.addNoteToQueue(note);
+		add(opponentStrumline);
+		add(opponentStrumline.notes);
+
+		playerStrumline = new Strumline(42 + (FlxG.width / 2) + 25, 30, DEFAULT, false, chart.speed);
+		for (note in chart.player)
+			playerStrumline.addNoteToQueue(note);
+		add(playerStrumline);
+		add(playerStrumline.notes);
 	}
 
 	override public function update(elapsed:Float):Void
@@ -91,11 +111,9 @@ class PlayState extends FlxState
 
 	public function onStepHit(step:Int):Void
 	{
-
 	}
 
 	public function onBeatHit(beat:Int):Void
 	{
-		trace(beat);
 	}
 }
