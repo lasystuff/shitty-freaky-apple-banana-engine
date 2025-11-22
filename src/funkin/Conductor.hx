@@ -2,6 +2,7 @@ package funkin;
 
 import flixel.FlxBasic;
 import flixel.util.FlxSignal.FlxTypedSignal;
+import funkin.game.song.Chart;
 
 typedef BPMChange = {
 	var bpm:Float;
@@ -29,38 +30,42 @@ class Conductor
 	public var onStepHit:FlxTypedSignal<Int->Void> = new FlxTypedSignal<Int->Void>();
 	public var onBeatHit:FlxTypedSignal<Int->Void> = new FlxTypedSignal<Int->Void>();
 
-	public function new()
-	{
-		bpmChanges = [];
-		/*
+	public function new():Void{}
 
+	public function mapBPMChange(chart:Chart)
+	{
 		var time:Float = 0;
 		var step:Float = 0;
 
-		for(e in song.events) {
-			if(e.name == "BPM Change") {
-				if(Std.parseFloat(e.data.bpm) == song.bpm) continue;
+		var curBPM:Float = chart.bpm;
 
-				var steps:Float = (e.time - time) / ((60 / song.bpm) * 1000 / 4);
+		for(e in chart.events)
+		{
+			if(e.name == "Change BPM")
+			{
+				if(e.data.bpm == curBPM)
+					continue;
+
+				var steps:Float = (e.time - time) / ((60 / curBPM) * 1000 / 4);
 				step += steps;
 				time = e.time;
-				song.bpm = e.data.bpm;
+				curBPM = e.data.bpm;
 
 				bpmChanges.push({
 					step: step,
 					time: time,
-					bpm: song.bpm
+					bpm: curBPM
 				});
 			}
 		}
-		*/
 	}
+
 
 	public function set_position(value:Float):Float
 	{
 		position = value;
 
-		var bpmChange:BPMChange = {step: 0, time: 0, bpm: 0};
+		var bpmChange:BPMChange = {step: 0, time: 0, bpm: this.bpm};
 		for (event in bpmChanges)
 		{
 			if (position >= event.time)

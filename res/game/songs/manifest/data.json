@@ -1,0 +1,15 @@
+{
+	"name": "Manifest",
+	"assets": {
+		"player": "bf",
+		"opponent": "dad",
+		"spectator": "gf",
+		"stage": "stage",
+		"ui": "default"
+	},
+	"meta": {
+		"artists": "Kawai Sprite",
+		"charter": "Ninjamuffin"
+	},
+	"difficulties": ["hard"]
+}
